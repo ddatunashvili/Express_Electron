@@ -1,0 +1,17 @@
+{
+  "name": "lockdown",
+  "version": "1.0.0",
+  "description": "An Electron app with Express server",
+  "main": "main.mjs",
+  "scripts": {
+    "start": "electron ."
+  },
+  "type": "module",
+  "dependencies": {
+    "electron": "^33.2.1",
+    "express": "^4.21.1",
+    "path": "^0.12.7"
+  },
+  "author": "",
+  "license": "ISC"
+}

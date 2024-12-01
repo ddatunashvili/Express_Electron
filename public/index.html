@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display PDF</title>
+</head>
+<body>
+    <h1>Available PDF Resources</h1>
+    <ul id="pdfList">
+        <!-- List of PDF files will be inserted here -->
+    </ul>
+
+    <!-- Iframe to display the selected PDF -->
+    <iframe id="pdfViewer" style="width: 100%; height: 600px;" frameborder="0"></iframe>
+
+    <script>
+        // Fetch available PDF resources from backend
+        fetch('http://localhost:3000/resources')
+            .then(response => response.json())
+            .then(data => {
+                const pdfList = document.getElementById('pdfList');
+                const pdfViewer = document.getElementById('pdfViewer');
+                
+                data.pdfFiles.forEach(pdf => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<a href="#" onclick="viewPDF('${pdf}')">${pdf}</a>`;
+                    pdfList.appendChild(listItem);
+                });
+
+                // Function to view PDF
+                window.viewPDF = function(fileName) {
+                    pdfViewer.src = `http://localhost:3000/resources/${fileName}`;
+                };
+            })
+            .catch(error => console.error('Error fetching resources:', error));
+    </script>
+</body>
+</html>

@@ -1,13 +1,18 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import express from 'express';
 import path from 'path';
 import routes from './routes.mjs';
 import { listRes } from './functions/list.mjs';    // Import the helper function
+import dotenv from 'dotenv';
+import fs from 'fs';
+
+dotenv.config();
 
 // Create __dirname equivalent in ES Module
 const __dirname = new URL('.', import.meta.url).pathname;
 
 let mainWindow;
+let mouseMoveCount = parseInt(process.env.MOUSE_MOVE_COUNT || '0', 10);
 
 // Initialize Express
 const expressApp = express();
@@ -31,16 +36,37 @@ app.on('ready', () => {
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
+        fullscreen: true,  // Make the window fullscreen
         webPreferences: {
             nodeIntegration: true,
+            autoHideMenuBar: true,
         },
     });
+
+    // Remove the default application menu
+    const menu = Menu.buildFromTemplate([]);
+    Menu.setApplicationMenu(menu);
 
     // Load the Express app in the Electron window (localhost:3000)
     mainWindow.loadURL('http://localhost:3000');  // This should point to your Express server
 
-    // Open DevTools for debugging (optional)
-    // mainWindow.webContents.openDevTools();
+    // Track mouse movement when the app window is not focused
+    mainWindow.on('blur', () => {
+        // Increment the mouse movement count every time the window loses focus
+        mouseMoveCount++;
+        
+        // Lock the app after 3 mouse movements
+        if (mouseMoveCount >= 3) {
+            process.env.APP_LOCKED = 'true';  // Lock the app
+            fs.writeFileSync('.env', `APP_LOCKED=true\nMOUSE_MOVE_COUNT=${mouseMoveCount}`);  // Write locked state to .env
+            mainWindow.loadURL('http://localhost:3000/locked'); // Change the URL to the locked page
+        } else {
+            process.env.MOUSE_MOVE_COUNT = mouseMoveCount.toString();
+            fs.writeFileSync('.env', `MOUSE_MOVE_COUNT=${mouseMoveCount}`);  // Update the count in the .env
+        }
+    });
+
+    
 });
 
 // Quit app when all windows are closed

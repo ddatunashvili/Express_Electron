@@ -17,6 +17,14 @@ router.get('/', (req, res) => {
 // Route to list available resources (e.g., PDFs in the 'resources' folder)
 router.get('/resources', listResources);
 
+router.get('/style.css', (req, res) => {
+    res.sendFile('/public/style.css', { root: '.' });
+});
+
+router.get('/locked', (req, res) => {
+    res.sendFile('/public/locked.html', { root: '.' });
+});
+
 // Route to serve a specific PDF file from the 'resources' folder
 router.get('/resources/:fileName', servePDF);
 

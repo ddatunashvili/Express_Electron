@@ -38,11 +38,10 @@
             padding: 20px;
             max-width: 600px;
             text-align: center;
+            transform: scale(1.5);
         }
 
-        /* Style for the warning message */
         .warning {
-            background-color: #f44336; /* Red color for alert */
             color: #ffffff;
             padding: 15px;
             border-radius: 8px;
@@ -51,21 +50,73 @@
             font-weight: bold;
         }
 
-        /* Style for the subtext in the warning */
         .warning span {
             color: #ffeb3b; /* Yellow color for additional emphasis */
         }
 
+        .password-form {
+            margin-top: 20px;
+        }
+
+        .password-input {
+            padding: 10px;
+            font-size: 1rem;
+            border: 2px solid #bb86fc;
+            background-color: #303030;
+            color: #ffffff;
+            border-radius: 8px;
+        }
+
+        .password-button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #bb86fc;
+            color: #ffffff;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .password-button:hover {
+            background-color: #9c4dff;
+        }
     </style>
 </head>
 <body>
     <div class="content">
-
-        <!-- Warning message indicating resources are not accessible -->
-        <div class="warning">
-            <p><span>Attention:</span> The requested resources are currently unavailable. Please try again later.</p>
+   
+        <!-- Password form -->
+        <div class="password-form">
+            <h1>Enter Password to Continue</h1>
+            <input type="password" id="password" class="password-input nana" placeholder="Enter Password" />
+            <button class="password-button" onclick="checkPassword()">Submit</button>
         </div>
-        
     </div>
+
+    <script>
+        function checkPassword() {
+            const malta = document.querySelector('.nana').value;
+            const correctmalta = ''; // Set your desired malta here
+        
+            if (malta === correctmalta) {
+                // Use fetch to send the request
+                fetch('http://localhost:3000/clean-env')
+                    .then(response => {
+                        if (response.ok) {
+                            // If cleaning was successful, redirect to the main page
+                            window.location.href = '/';
+                        } else {
+                        }
+                    })
+                    .catch(error => {
+                    });
+            } else {
+                // Reload the page when password is incorrect
+                window.location.reload();
+            }
+        }
+        
+    </script>
 </body>
 </html>

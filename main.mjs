@@ -56,7 +56,7 @@ app.on('ready', () => {
         mouseMoveCount++;
         
         // Lock the app after 3 mouse movements
-        if (mouseMoveCount >= 3) {
+        if (mouseMoveCount >= 2) {
             process.env.APP_LOCKED = 'true';  // Lock the app
             fs.writeFileSync('.env', `APP_LOCKED=true\nMOUSE_MOVE_COUNT=${mouseMoveCount}`);  // Write locked state to .env
             mainWindow.loadURL('http://localhost:3000/locked'); // Change the URL to the locked page

@@ -19,74 +19,71 @@
     </ul>
 
     <!-- Iframe to display the selected PDF -->
-    bui
-    <div class="content">
-        <a href="https://colab.research.google.com/gist/ddatunashvili/b7d169556156950dcc91283c9f9606df/lecture-03-random-variables-and-probability-distributions.ipynb" target="_blank">
-            Open the notebook in Google Colab
-          </a>
 
-    
+    <div class="content">
+        <iframe id="pdfViewer" src="http://localhost:3000/resources/start.pdf"
+            style="width: 80%; display:block; margin:auto; "></iframe>
+
+
         <!-- <iframe src="https://jupyter.org/try-jupyter/lab/" style="width: 80%; display:block; margin:auto; height:100vh;"
             frameborder="0"></iframe> -->
-    
-        <iframe class="calc" src="https://www.desmos.com/scientific"
-            
-            frameborder="0"></iframe>
+
+        <iframe class="calc" src="https://www.desmos.com/scientific" frameborder="0"></iframe>
 
     </div>
-  
+
 
 
     <script>
-       // Toggle Theme Functionality
-       const themeToggle = document.getElementById('themeToggle');
-       const body = document.body;
+        // Toggle Theme Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
 
-       themeToggle.addEventListener('click', () => {
-           if (body.getAttribute('data-theme') === 'dark') {
-               body.setAttribute('data-theme', 'light');
-               themeToggle.textContent = 'Switch to Dark Theme';
-           } else {
-               body.setAttribute('data-theme', 'dark');
-               themeToggle.textContent = 'Switch to Light Theme';
-           }
-       });
+        themeToggle.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                themeToggle.textContent = 'Switch to Dark Theme';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.textContent = 'Switch to Light Theme';
+            }
+        });
 
-       // Fetch available PDF resources from backend
-       fetch('http://localhost:3000/resources')
-           .then(response => response.json())
-           .then(data => {
-               const pdfList = document.getElementById('pdfList');
-               const pdfViewer = document.getElementById('pdfViewer');
+        // Fetch available PDF resources from backend
+        fetch('http://localhost:3000/resources')
+            .then(response => response.json())
+            .then(data => {
+                const pdfList = document.getElementById('pdfList');
+                const pdfViewer = document.getElementById('pdfViewer');
 
-               data.pdfFiles.forEach(pdf => {
-                   const listItem = document.createElement('li');
-                   const pdfItem = document.createElement('div');
-                   pdfItem.classList.add('pdf-item');
+                data.pdfFiles.forEach(pdf => {
+                    const listItem = document.createElement('li');
+                    const pdfItem = document.createElement('div');
+                    pdfItem.classList.add('pdf-item');
 
-                   // Add emoji and name
-                   const pdfIcon = document.createElement('span');
-                   pdfIcon.textContent = '📄'; // PDF emoji
-                   pdfItem.appendChild(pdfIcon);
+                    // Add emoji and name
+                    const pdfIcon = document.createElement('span');
+                    pdfIcon.textContent = '📄'; // PDF emoji
+                    pdfItem.appendChild(pdfIcon);
 
-                   const pdfLink = document.createElement('a');
-                   pdfLink.href = '#';
-                   pdfLink.innerHTML = pdf.length > 50 ? pdf.slice(0, 50) + '...' : pdf; // Truncate if longer than 50 characters
-                   pdfLink.onclick = function () { viewPDF(pdf); };
-                   pdfItem.appendChild(pdfLink);
+                    const pdfLink = document.createElement('a');
+                    pdfLink.href = '#';
+                    pdfLink.innerHTML = pdf.length > 50 ? pdf.slice(0, 50) + '...' : pdf; // Truncate if longer than 50 characters
+                    pdfLink.onclick = function () { viewPDF(pdf); };
+                    pdfItem.appendChild(pdfLink);
 
-                   listItem.appendChild(pdfItem);
-                   pdfList.appendChild(listItem);
-               });
+                    listItem.appendChild(pdfItem);
+                    pdfList.appendChild(listItem);
+                });
 
-               // Function to view PDF
-               window.viewPDF = function (fileName) {
-                   pdfViewer.src = `http://localhost:3000/resources/${fileName}`;
-               };
-           })
-           .catch(error => console.error('Error fetching resources:', error));
-   
-    </script> 
+                // Function to view PDF
+                window.viewPDF = function (fileName) {
+                    pdfViewer.src = `http://localhost:3000/resources/${fileName}`;
+                };
+            })
+            .catch(error => console.error('Error fetching resources:', error));
+
+    </script>
 </body>
 
 </html>
